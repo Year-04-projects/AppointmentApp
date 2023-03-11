@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const primaryColor = Color.fromRGBO(155, 106, 222, 1);
+const primaryColor = Color.fromRGBO(104, 122, 225, 1);
 const secondaryColor = Color.fromRGBO(242, 223, 215, 1);
 const lightPrimaryColor = Color.fromRGBO(155, 106, 222, 0.3);
 const unselectedIconColor = Color.fromRGBO(101, 96, 112, 1);
