@@ -41,6 +41,7 @@ dependencies:
   firebase_auth: ^4.2.10
   google_fonts: ^4.0.3
   fluttertoast: ^8.2.1
+  sidebarx: ^0.15.0
 
 dev_dependencies:
   flutter_test:

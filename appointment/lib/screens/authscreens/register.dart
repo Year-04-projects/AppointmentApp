@@ -104,7 +104,7 @@ class _registerState extends State<register> {
                     ),
                     const Spacer(flex: 2),
                     Text(
-                      'Sign up for free',
+                      'Sign up',
                       style: GoogleFonts.urbanist(
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
