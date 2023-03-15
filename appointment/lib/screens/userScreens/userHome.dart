@@ -1,3 +1,5 @@
+
+import 'package:appointment/widgets/profilescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -21,20 +23,11 @@ class _userHomeState extends State<userHome> {
   }
 
 //add screen widgets here
-  final List<Widget> _children = [
-    Center(child: Text('Home screen')),
-    Center(child: Text('2rd Screen')),
-    Center(
-      child: ElevatedButton(
-        onPressed: () {
-          AuthServices().signOut();
-          
-        },
-        child: Text('User Signout'),
-      ),
-    ),
-  ];
-  
+final List<Widget> _children = [
+  Center(child: Text('Home screen')),
+  Center(child: Text('2rd Screen')),
+  profilescreen()
+];
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +44,10 @@ class _userHomeState extends State<userHome> {
               Text(
                 'Medicare',
                 style: GoogleFonts.urbanist(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: -0.1,
-                  color: primaryColor
-                ),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: -0.1,
+                    color: primaryColor),
               ),
             ],
           )),

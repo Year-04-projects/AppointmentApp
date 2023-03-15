@@ -1,4 +1,8 @@
-
+import 'package:appointment/screens/AdminScreens/adminhome.dart';
+import 'package:appointment/screens/root_screen.dart';
+import 'package:appointment/screens/userScreens/userHome.dart';
+import 'package:appointment/services/auth_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,8 +19,10 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
         title: 'CTSE_APP',
         theme: ThemeData(
@@ -31,6 +37,6 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.blue,
         ),
-        home: login());
+        home: roootScreen());
   }
 }

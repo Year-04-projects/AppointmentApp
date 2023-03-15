@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -10,7 +8,6 @@ import '../../widgets/common/tex_field_field.dart';
 import '../AdminScreens/adminhome.dart';
 import '../userScreens/userHome.dart';
 import 'register.dart';
-
 
 class login extends StatefulWidget {
   const login({Key? key}) : super(key: key);
