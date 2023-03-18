@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
+import 'package:appointment/widgets/datatable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -14,7 +17,7 @@ class ScheduleManagment extends StatefulWidget {
 }
 
 class SscheduleManagmentState extends State<ScheduleManagment> {
-    User? _user;
+  User? _user;
   //get logged user details
   void userdetails() async {
     User user = await AuthServices().getUserDetails();
@@ -30,6 +33,7 @@ class SscheduleManagmentState extends State<ScheduleManagment> {
     super.initState();
     userdetails();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +41,7 @@ class SscheduleManagmentState extends State<ScheduleManagment> {
         centerTitle: true,
         backgroundColor: primaryColor,
         title: Text(
-          'Admin Home',
+          'Admin Schedule Management',
           style: GoogleFonts.urbanist(
             fontSize: 24,
             fontWeight: FontWeight.w600,
@@ -46,6 +50,51 @@ class SscheduleManagmentState extends State<ScheduleManagment> {
         ),
       ),
       drawer: NavDrawer(),
-    );;
+      body: Column(children: [
+        Expanded(
+            flex: 1,
+            child: Container(
+              color: Colors.white,
+              child: Row(
+                children: [
+                  SizedBox(width: 20,),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextField(
+                        decoration: InputDecoration(
+                            hintText: 'Search Schedule',
+                            // border:,
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12)),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(onPressed: () {}, child: Text('xls')),
+                        SizedBox(width: 5,),
+                        ElevatedButton(onPressed: () {}, child: Text('add')),
+                        SizedBox(width: 10,),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            )),
+        SizedBox(
+          height: 10,
+        ),
+        Expanded(
+            flex: 9,
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: tableWidget()
+            ))
+      ]),
+    );
   }
 }
