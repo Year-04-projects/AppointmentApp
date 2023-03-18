@@ -10,6 +10,7 @@ class tableWidget extends StatefulWidget {
 }
 
 class _tableWidgetState extends State<tableWidget> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +19,7 @@ class _tableWidgetState extends State<tableWidget> {
         children: [
           PaginatedDataTable(
             header: Text('Schedules'),
-            rowsPerPage: 10,
+            rowsPerPage: _DataSource(context).rowCount >=10? 10:_DataSource(context).rowCount,
             // ignore: prefer_const_literals_to_create_immutables
             columns: [
               DataColumn(label: Text('')),
@@ -99,6 +100,23 @@ class _DataSource extends DataTableSource {
         5,
         10
       ),
+        _Row(
+        'Cell A1',
+        'Cell A5',
+        'CellB5',
+        'CellC5',
+        5,
+        10
+      ),
+        _Row(
+        'Cell A1',
+        'Cell A5',
+        'CellB5',
+        'CellC5',
+        5,
+        10
+      ),
+      
     ];
   }
 
