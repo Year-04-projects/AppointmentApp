@@ -1,15 +1,18 @@
+import 'package:appointment/screens/AdminScreens/schedulemanagment.dart';
 import 'package:appointment/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../models/user_model.dart';
+import '../provider/userdetailsprovider.dart';
 import '../screens/authscreens/login.dart';
 import '../services/auth_services.dart';
 
 class NavDrawer extends StatefulWidget {
-  final User? user;
+  
 
-  const NavDrawer({Key? key, this.user}) : super(key: key);
+  const NavDrawer({Key? key}) : super(key: key);
 
   @override
   State<NavDrawer> createState() => _NavDrawerState();
@@ -64,21 +67,27 @@ class _NavDrawerState extends State<NavDrawer> {
               ),
             ),
             SizedBox(height: 12),
-            Text(
-               widget.user?.name ?? 'loading..',
-              style: GoogleFonts.urbanist(
+            Consumer<UserDetailsProvider>(
+              builder: (context, provider, _) => Text(
+                provider.user?.name ?? 'loading..',
+                style: GoogleFonts.urbanist(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
                   letterSpacing: -0.1,
-                  color: Colors.white),
+                  color: Colors.white,
+                ),
+              ),
             ),
-            Text(
-              widget.user?.email ?? 'loading..',
-              style: GoogleFonts.urbanist(
-                  fontSize: 14,
+            Consumer<UserDetailsProvider>(
+              builder: (context, provider, _) => Text(
+                provider.user?.email ?? 'loading..',
+                style: GoogleFonts.urbanist(
+                  fontSize: 20,
                   fontWeight: FontWeight.w600,
                   letterSpacing: -0.1,
-                  color: Colors.white),
+                  color: Colors.white,
+                ),
+              ),
             ),
           ],
         ),
@@ -119,7 +128,11 @@ class _NavDrawerState extends State<NavDrawer> {
                   letterSpacing: -0.1,
                   color: Colors.white),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => ScheduleManagment()));
+            },
           ),
           ListTile(
             leading: const Icon(
