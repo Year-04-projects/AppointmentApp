@@ -23,6 +23,16 @@ class User {
         'photoUrl': photoUrl,
       };
 
+  static User fromJson(User user) {
+    return User(
+      uid: user.uid,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      photoUrl: user.photoUrl,
+    );
+  }
+
   static User fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
 
