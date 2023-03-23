@@ -43,7 +43,22 @@ class _ScheduleManagmentModalState extends State<ScheduleManagmentModal> {
         docid: widget.doctor);
     print('dfsfgdsgdf ${res}');
     if (res == 'Added Schedule') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(res),
+          backgroundColor: Colors.black,
+          duration: Duration(seconds: 3),
+        ),
+      );
       Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+        ),
+      );
     }
   }
 

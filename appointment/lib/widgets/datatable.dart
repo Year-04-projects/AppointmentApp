@@ -1,16 +1,28 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:appointment/screens/AdminScreens/updateschedulescreen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../services/schedule.service.dart';
+
 class tableWidget extends StatefulWidget {
-  const tableWidget({super.key});
+  final List<QueryDocumentSnapshot> records;
+  const tableWidget(this.records, {super.key});
+  //  const tableWidget({super.key});
 
   @override
   State<tableWidget> createState() => _tableWidgetState();
 }
 
 class _tableWidgetState extends State<tableWidget> {
-  
+  void initState() {
+    widget.records.forEach((doc) {
+      print('Doctor Name: ${doc['venue']}');
+    });
+    print('recordis ${widget.records}');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +31,9 @@ class _tableWidgetState extends State<tableWidget> {
         children: [
           PaginatedDataTable(
             header: Text('Schedules'),
-            rowsPerPage: _DataSource(context).rowCount >=10? 10:_DataSource(context).rowCount,
+            rowsPerPage: _DataSource(context, widget.records).rowCount >= 10
+                ? 10
+                : _DataSource(context, widget.records).rowCount,
             // ignore: prefer_const_literals_to_create_immutables
             columns: [
               DataColumn(label: Text('')),
@@ -30,7 +44,7 @@ class _tableWidgetState extends State<tableWidget> {
               DataColumn(label: Text('Appointments/Slot')),
               DataColumn(label: Text('')),
             ],
-            source: _DataSource(context),
+            source: _DataSource(context, widget.records),
           ),
         ],
       ),
@@ -40,6 +54,7 @@ class _tableWidgetState extends State<tableWidget> {
 
 class _Row {
   _Row(
+    this.valuesid,
     this.valueF,
     this.valueA,
     this.valueB,
@@ -47,77 +62,31 @@ class _Row {
     this.valueD,
     this.valueE,
   );
+  final String valuesid;
   final String valueF;
   final String valueA;
   final String valueB;
   final String valueC;
-  final int valueD;
+  final String valueD;
   final int valueE;
 
   bool selected = false;
 }
 
 class _DataSource extends DataTableSource {
-  _DataSource(this.context) {
-    _rows = <_Row>[
-      _Row(
-        'Cell A1',
-        'Cell A1',
-        'CellB1',
-        'CellC1',
-        1,
-        10
-      ),
-      _Row(
-        'Cell A1',
-        'Cell A2',
-        'CellB2',
-        'CellC2',
-        2,
-        10
-      ),
-      _Row(
-        'Cell A1',
-        'Cell A3',
-        'CellB3',
-        'CellC3',
-        3,
-        10
-      ),
-      _Row(
-        'Cell A1',
-        'Cell A4',
-        'CellB4',
-        'CellC4',
-        4,
-        10
-      ),
-      _Row(
-        'Cell A1',
-        'Cell A5',
-        'CellB5',
-        'CellC5',
-        5,
-        10
-      ),
-        _Row(
-        'Cell A1',
-        'Cell A5',
-        'CellB5',
-        'CellC5',
-        5,
-        10
-      ),
-        _Row(
-        'Cell A1',
-        'Cell A5',
-        'CellB5',
-        'CellC5',
-        5,
-        10
-      ),
-      
-    ];
+  _DataSource(this.context, records) {
+    _rows = records.map<_Row>((record) {
+      print(record.data()); // print all fields and their values
+      return _Row(
+        record['sid'],
+        'checkbox',
+        record['docid'],
+        record['venue'],
+        record['arivaltime'],
+        record['leavingtime'],
+        record['patientcount'],
+      );
+    }).toList();
   }
 
   final BuildContext context;
@@ -133,9 +102,10 @@ class _DataSource extends DataTableSource {
     return DataRow.byIndex(
       index: index,
       cells: [
-        DataCell(Checkbox(value: true,onChanged: (value) {
-          
-        },)),
+        DataCell(Checkbox(
+          value: true,
+          onChanged: (value) {},
+        )),
         DataCell(Text(row.valueA)),
         DataCell(Text(row.valueB)),
         DataCell(Text(row.valueC)),
@@ -152,7 +122,14 @@ class _DataSource extends DataTableSource {
                     color: Colors.green),
                 child: Center(
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UpdateScheduleScreen(
+                                    scheduleId: row.valuesid,
+                                  )));
+                    },
                     icon: Icon(Icons.update),
                     color: Colors.white,
                   ),
@@ -169,7 +146,18 @@ class _DataSource extends DataTableSource {
                     color: Colors.red),
                 child: Center(
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      // print('objectds ${row.valuesid}');
+                      final res =
+                          await ScheduleService().deleteSchedule(row.valuesid);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(res),
+                          backgroundColor: Colors.green,
+                          duration: Duration(seconds: 3),
+                        ),
+                      );
+                    },
                     icon: Icon(Icons.delete),
                     color: Colors.white,
                   ),
