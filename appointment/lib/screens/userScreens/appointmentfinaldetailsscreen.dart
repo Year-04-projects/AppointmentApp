@@ -115,7 +115,7 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
                       height: 10,
                     ),
                     Text(
-                      ' Your Appointment Date is On ${DateFormat('dd/mm/yyyy').format(DateTime.parse(_Date)).toString()}',
+                      ' Your Appointment Date is On $_Date',
                       style: GoogleFonts.urbanist(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,

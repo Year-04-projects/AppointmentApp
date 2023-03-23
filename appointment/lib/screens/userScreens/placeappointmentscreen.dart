@@ -84,7 +84,7 @@ class _placeAppointmentState extends State<placeAppointment> {
                     height: 10,
                   ),
                   Text(
-                    'Appointment Date:   ${DateFormat('dd/mm/yyyy').format(widget.date)}',
+                    'Appointment Date:   ${widget.date}',
                     style: GoogleFonts.urbanist(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,

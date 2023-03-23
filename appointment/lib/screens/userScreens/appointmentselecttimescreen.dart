@@ -20,6 +20,7 @@ class _appointmenttimeState extends State<appointmenttime> {
   bool _isLoading = false;
   var _Data;
   var _SchduleData;
+  var _fullybookeddates;
   List<DateTime> days =
       List.generate(7, (index) => DateTime.now().add(Duration(days: index)));
 
@@ -47,7 +48,10 @@ class _appointmenttimeState extends State<appointmenttime> {
     _SchduleData = schedulequerySnapshot.docs.map((doc) => doc.data()).toList();
     _Data = querySnapshot.docs.map((doc) => doc.data()).toList();
 
-    print('data is${_SchduleData[0]['daysavailable']}');
+    // print('countofdocs snapshot${querySnapshot}');
+    int count = querySnapshot.size;
+
+    print('data is _SchduleData${_SchduleData}');
     _SchduleData[0]['daysavailable'].forEach((e) => selectedDays.add(e));
     setState(() {
       _Data = _Data[0];
@@ -144,7 +148,33 @@ class _appointmenttimeState extends State<appointmenttime> {
                                       ),
                                     ]),
                                   ),
-                                  onTap: () {
+                                  onTap: () async {
+                                    CollectionReference appointmentRef =
+                                        FirebaseFirestore.instance
+                                            .collection('appointment');
+                                    QuerySnapshot querySnapshot =
+                                        await appointmentRef
+                                            .where('date',
+                                                isEqualTo:
+                                                    DateFormat('dd/mm/yyyy')
+                                                        .format(day)
+                                                        .toString())
+                                            .get();
+                                    int count = querySnapshot.size;
+
+                                    if (_SchduleData['patientcount'] <= count) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              'Sorry This Day is Fully Booked'),
+                                          backgroundColor: Colors.red,
+                                          duration: Duration(seconds: 3),
+                                        ),
+                                      );
+                                      return;
+                                    }
+
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(

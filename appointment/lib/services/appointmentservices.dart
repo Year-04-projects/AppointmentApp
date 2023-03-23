@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../models/appointments_model.dart' as model;
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
-
+import 'package:intl/intl.dart';
 class AppointmentService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -20,10 +20,11 @@ class AppointmentService {
       CollectionReference appointmentRef =
           FirebaseFirestore.instance.collection('appointment');
       QuerySnapshot querySnapshot =
-          await appointmentRef.where('date', isEqualTo: date).get();
+          await appointmentRef.where('date', isEqualTo: DateFormat('dd/mm/yyyy').format(DateTime.parse(date)).toString()).get();
       // print('countofdocs snapshot${querySnapshot}');
       int count = querySnapshot.size;
       // print('countofdocs${count} }');
+      print('coufdsnt$count');
 
       var uuid = Uuid();
       final Aid = await uuid.v4();
@@ -32,7 +33,7 @@ class AppointmentService {
           docid:docid ,
           Aid: Aid,
           patientID: currentUser.uid,
-          date: date,
+          date:  DateFormat('dd/mm/yyyy').format(DateTime.parse(date)).toString(),
           appointmentnumber: count + 1,
         );
         final a = {'Aid': Aid, 'msg': 'Placed Appointment'};
