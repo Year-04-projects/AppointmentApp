@@ -69,7 +69,7 @@ class _NavDrawerState extends State<NavDrawer> {
             SizedBox(height: 12),
             Consumer<UserDetailsProvider>(
               builder: (context, provider, _) => Text(
-                provider.user?.name ?? 'loading..',
+                provider.getUser.name ?? 'loading..',
                 style: GoogleFonts.urbanist(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
@@ -80,7 +80,7 @@ class _NavDrawerState extends State<NavDrawer> {
             ),
             Consumer<UserDetailsProvider>(
               builder: (context, provider, _) => Text(
-                provider.user?.email ?? 'loading..',
+                provider.getUser?.email ?? 'loading..',
                 style: GoogleFonts.urbanist(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,

@@ -1,17 +1,18 @@
 import 'package:appointment/models/user_model.dart' as model;
 import 'package:flutter/material.dart';
 
+import '../models/user_model.dart';
 import '../services/auth_services.dart';
 
 class UserDetailsProvider extends ChangeNotifier {
-  final auth = AuthServices();
-  model.User? _user;
+  User? _user;
+  final AuthServices _authMethods = AuthServices();
 
-  model.User? get user => _user;
+  User get getUser => _user!;
 
-  Future<void> getUserDetails() async {
-    final data = await auth.getUserDetails();
-    _user = model.User.fromJson(data);
+  Future<void> refreshUser() async {
+    User user = await _authMethods.getUserDetails();
+    _user = user;
     notifyListeners();
   }
 }

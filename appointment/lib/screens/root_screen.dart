@@ -3,7 +3,9 @@ import 'package:appointment/screens/userScreens/userHome.dart';
 import 'package:appointment/utils/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../provider/userdetailsprovider.dart';
 import '../services/auth_services.dart';
 import 'authscreens/login.dart';
 
@@ -35,6 +37,9 @@ class _roootScreenState extends State<roootScreen> {
         _isLoading = false;
       });
     } else {
+      UserDetailsProvider userdetailsProvider =
+        Provider.of<UserDetailsProvider>(context, listen: false);
+      await userdetailsProvider.refreshUser();
       AuthServices().getUserDetails().then((value) => {
             if (value.role == 'admin')
               {

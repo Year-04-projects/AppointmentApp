@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/user_model.dart';
+import '../../provider/userdetailsprovider.dart';
 import '../../services/auth_services.dart';
 import '../../utils/colors.dart';
 import '../../widgets/common/tex_field_field.dart';
@@ -54,6 +56,9 @@ class _loginState extends State<login> {
       });
     } else {
       //if login true
+      UserDetailsProvider userdetailsProvider =
+          Provider.of<UserDetailsProvider>(context, listen: false);
+      await userdetailsProvider.refreshUser();
       User user = await AuthServices().getUserDetails();
       if (user.role == 'admin') {
         setState(() {
