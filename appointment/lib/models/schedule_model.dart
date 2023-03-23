@@ -22,6 +22,7 @@ class Schedule {
   });
 
   Map<String, dynamic> tojson() => {
+        'sid': sid,
         'docid': docid,
         'arivaltime': arivaltime,
         'leavingtime': leavingtime,

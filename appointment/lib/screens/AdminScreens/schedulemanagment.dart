@@ -2,6 +2,7 @@
 
 import 'package:appointment/widgets/datatable.dart';
 import 'package:appointment/widgets/selectdoctormodal.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -18,8 +19,9 @@ class ScheduleManagment extends StatefulWidget {
 }
 
 class SscheduleManagmentState extends State<ScheduleManagment> {
-  
   User? _user;
+  bool _isLoading = false;
+  var records;
   //get logged user details
   void userdetails() async {
     User user = await AuthServices().getUserDetails();
@@ -34,6 +36,29 @@ class SscheduleManagmentState extends State<ScheduleManagment> {
   void initState() {
     super.initState();
     userdetails();
+    getData();
+  }
+
+  getData() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      var collection = FirebaseFirestore.instance.collection('schedule');
+      var docSnapshot = await collection.get();
+      // var records = docSnapshot.docs;
+      print('Recors ${docSnapshot.docs}');
+      setState(() {
+        records = docSnapshot.docs;
+      });
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
   }
 
   @override
@@ -65,16 +90,16 @@ class SscheduleManagmentState extends State<ScheduleManagment> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text('add search here')
-                      // TextField(
-                      //   decoration: InputDecoration(
-                      //       hintText: 'Search Schedule',
-                      //       // border:,
-                      //       contentPadding: EdgeInsets.symmetric(
-                      //           horizontal: 16, vertical: 12)),
-                      // ),
-                    ),
+                        alignment: Alignment.centerLeft,
+                        child: Text('add search here')
+                        // TextField(
+                        //   decoration: InputDecoration(
+                        //       hintText: 'Search Schedule',
+                        //       // border:,
+                        //       contentPadding: EdgeInsets.symmetric(
+                        //           horizontal: 16, vertical: 12)),
+                        // ),
+                        ),
                   ),
                   Expanded(
                     child: Row(
@@ -135,7 +160,9 @@ class SscheduleManagmentState extends State<ScheduleManagment> {
         ),
         Expanded(
             flex: 9,
-            child: Padding(padding: EdgeInsets.all(10), child: tableWidget()))
+            child: _isLoading
+                ? Text('loading...')
+                : Padding(padding: EdgeInsets.all(10), child: tableWidget(records)))
       ]),
     );
   }
