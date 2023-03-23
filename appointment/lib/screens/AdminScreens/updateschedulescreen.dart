@@ -26,7 +26,7 @@ class _UpdateScheduleScreenState extends State<UpdateScheduleScreen> {
   final TextEditingController _leavingtimecontroller = TextEditingController();
 
   List<String> items = ['None', 'ads', 'das'];
-  List<String> days = ['Mon', 'Tue', 'Wens', 'Thur', 'Frid', 'Sat', 'Sun'];
+  List<String> days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   List<String> selectedDays = [];
 
   var records;
