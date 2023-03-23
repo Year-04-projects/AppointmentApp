@@ -9,12 +9,21 @@ class AuthServices {
 
   //! Get logged user Details
   Future<model.User> getUserDetails() async {
-    final currentUser = _auth.currentUser!;
+    print('imherent');
+    try {
+      final currentUser = _auth.currentUser!;
+      if (currentUser != null) {
+        DocumentSnapshot snap =
+            await _firestore.collection('users').doc(currentUser.uid).get();
 
-    DocumentSnapshot snap =
-        await _firestore.collection('users').doc(currentUser.uid).get();
-
-    return model.User.fromSnap(snap);
+        return model.User.fromSnap(snap);
+      }else{
+        throw Exception('Curren user is null or');
+      }
+    } catch (e) {
+      print('erroatgetr${e}');
+      throw Exception(e);
+    }
   }
 
 // user register
