@@ -1,4 +1,5 @@
 
+import 'package:appointment/screens/userScreens/doctorslistscreen.dart';
 import 'package:appointment/widgets/profilescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,7 +25,7 @@ class _userHomeState extends State<userHome> {
 
 //add screen widgets here
 final List<Widget> _children = [
-  Center(child: Text('Home screen')),
+  doctorslist(),
   Center(child: Text('2rd Screen')),
   profilescreen()
 ];
