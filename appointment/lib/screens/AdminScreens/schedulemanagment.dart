@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:appointment/widgets/datatable.dart';
+import 'package:appointment/widgets/selectdoctormodal.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,6 +18,7 @@ class ScheduleManagment extends StatefulWidget {
 }
 
 class SscheduleManagmentState extends State<ScheduleManagment> {
+  
   User? _user;
   //get logged user details
   void userdetails() async {
@@ -57,28 +59,71 @@ class SscheduleManagmentState extends State<ScheduleManagment> {
               color: Colors.white,
               child: Row(
                 children: [
-                  SizedBox(width: 20,),
+                  SizedBox(
+                    width: 20,
+                  ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: TextField(
-                        decoration: InputDecoration(
-                            hintText: 'Search Schedule',
-                            // border:,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 12)),
-                      ),
+                      child: Text('add search here')
+                      // TextField(
+                      //   decoration: InputDecoration(
+                      //       hintText: 'Search Schedule',
+                      //       // border:,
+                      //       contentPadding: EdgeInsets.symmetric(
+                      //           horizontal: 16, vertical: 12)),
+                      // ),
                     ),
                   ),
                   Expanded(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        ElevatedButton(onPressed: () {}, child: Text('xls')),
-                        SizedBox(width: 5,),
-                        ElevatedButton(onPressed: () {}, child: Text('add')),
-                        SizedBox(width: 10,),
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.green,
+                            ),
+                            onPressed: () {},
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.file_download_outlined),
+                                SizedBox(width: 5),
+                                Text('Export XLS')
+                              ],
+                            )),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: primaryColor,
+                            ),
+                            onPressed: () {
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) =>
+                              //             ScheduleManagmentModal()));
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return selectdoctorpopup();
+                                },
+                              );
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.add),
+                                SizedBox(width: 5),
+                                Text('Add New')
+                              ],
+                            )),
+                        SizedBox(
+                          width: 10,
+                        ),
                       ],
                     ),
                   )
@@ -90,10 +135,7 @@ class SscheduleManagmentState extends State<ScheduleManagment> {
         ),
         Expanded(
             flex: 9,
-            child: Padding(
-              padding: EdgeInsets.all(10),
-              child: tableWidget()
-            ))
+            child: Padding(padding: EdgeInsets.all(10), child: tableWidget()))
       ]),
     );
   }
