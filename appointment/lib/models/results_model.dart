@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Result {
+  String? uid;
   final String name;
   final int age;
 
-  const Result({
+  Result({
+    this.uid,
     required this.name,
     required this.age,
   });
