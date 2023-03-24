@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../models/results_model.dart';
 
 import '../../services/resultServices.dart';
+import 'editLabResult.dart';
 
 class AllLabResults extends StatefulWidget {
   const AllLabResults({super.key});
@@ -46,6 +47,47 @@ class _AllLabResultsState extends State<AllLabResults> {
                                     Text("Age: " + e['age'].toString()),
                                   ],
                                 )))),
+                            ButtonBar(
+                              alignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.pushAndRemoveUntil<dynamic>(
+                                      context,
+                                      MaterialPageRoute<dynamic>(
+                                        builder: (BuildContext context) =>
+                                            EditResult(
+                                          result: Result(
+                                              uid: e.id,
+                                              name: e["Result name"],
+                                              age: e["age"]),
+                                        ),
+                                      ),
+                                      (route) => false,
+                                    );
+                                  },
+                                  icon: const Icon(Icons.edit),
+                                ),
+                                IconButton(
+                                    onPressed: () async {
+                                      var res =
+                                          await ResultService.deleteLabResult(
+                                              docId: e.id);
+                                      if (res.code == 200) {
+                                        // ignore: use_build_context_synchronously
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                content: Text(
+                                                    res.message.toString()),
+                                              );
+                                            });
+                                      }
+                                    },
+                                    icon: const Icon(Icons.delete)),
+                              ],
+                            )
                           ]),
                         );
                       }).toList(),
