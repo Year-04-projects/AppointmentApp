@@ -59,7 +59,6 @@ class _selectdoctorpopupState extends State<selectdoctorpopup> {
                     child: Column(
                       children: [
                         SearchableDropDownField(
-                          
                           label: 'Doctor ${doctor}',
                           hintText: 'Search Doctor',
                           withAsterisk: true,

@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 import '../services/schedule.service.dart';
 
 class tableWidget extends StatefulWidget {
+  final Function(String) getData;
   final List<QueryDocumentSnapshot> records;
-  const tableWidget(this.records, {super.key});
+  const tableWidget(this.records, {super.key, required this.getData});
   //  const tableWidget({super.key});
 
   @override
@@ -31,9 +32,11 @@ class _tableWidgetState extends State<tableWidget> {
         children: [
           PaginatedDataTable(
             header: Text('Schedules'),
-            rowsPerPage: _DataSource(context, widget.records).rowCount >= 10
+            rowsPerPage: _DataSource(context, widget.records, widget.getData)
+                        .rowCount >=
+                    10
                 ? 10
-                : _DataSource(context, widget.records).rowCount,
+                : _DataSource(context, widget.records, widget.getData).rowCount,
             // ignore: prefer_const_literals_to_create_immutables
             columns: [
               DataColumn(label: Text('')),
@@ -44,7 +47,7 @@ class _tableWidgetState extends State<tableWidget> {
               DataColumn(label: Text('Appointments/Slot')),
               DataColumn(label: Text('')),
             ],
-            source: _DataSource(context, widget.records),
+            source: _DataSource(context, widget.records, widget.getData),
           ),
         ],
       ),
@@ -74,7 +77,7 @@ class _Row {
 }
 
 class _DataSource extends DataTableSource {
-  _DataSource(this.context, records) {
+  _DataSource(this.context, records, this.getData) {
     _rows = records.map<_Row>((record) {
       print(record.data()); // print all fields and their values
       return _Row(
@@ -91,6 +94,7 @@ class _DataSource extends DataTableSource {
 
   final BuildContext context;
   List<_Row> _rows = [];
+  final Function(String) getData;
 
   int _selectedCount = 0;
 
@@ -148,8 +152,10 @@ class _DataSource extends DataTableSource {
                   child: IconButton(
                     onPressed: () async {
                       // print('objectds ${row.valuesid}');
+
                       final res =
                           await ScheduleService().deleteSchedule(row.valuesid);
+                      getData('ho');
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(res),

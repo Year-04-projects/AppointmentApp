@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+
 
 class AppointmentDetailsScreen extends StatefulWidget {
   final Aid;
@@ -39,7 +41,7 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
       CollectionReference _doccollectionRef =
           FirebaseFirestore.instance.collection('doctors');
       QuerySnapshot docquerySnapshot = await _doccollectionRef
-          .where('docid', isEqualTo: docSnapshot['docid'])
+          .where('uid', isEqualTo: docSnapshot['docid'])
           .get();
       //get patient details
       CollectionReference _patientcollectionRef =
@@ -62,7 +64,7 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
 
       print("sdfdsf _doctordetails${_doctordetails}");
       print("sdfdsf _patientdetails${_patientdetails}");
-      print("sdfdsf _scheduledetails${_scheduledetails}");
+      print("sdfdsf _scheduledetails${_scheduledetails[0]}");
 
       setState(() {
         _isLoading = false;
@@ -85,7 +87,9 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
           ),
         ),
         body: _isLoading
-            ? Text('loading')
+            ? Center(
+                child: LinearProgressIndicator(),
+              )
             : Container(
                 margin: EdgeInsets.all(16.0),
                 padding: EdgeInsets.all(16.0),
@@ -172,14 +176,23 @@ class _AppointmentDetailsScreenState extends State<AppointmentDetailsScreen> {
                           color: Colors.black),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                     Center(
                       child: Container(
-                        color: Colors.red,
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                          color: Colors.black,
+                          width: 2,
+                        )),
+                        color: primaryColor,
                         height: 200,
                         width: 200,
-                        child: Text('Area For QR'),
+                        child: QrImage(
+                          data: widget.Aid,
+                          version: QrVersions.auto,
+                          size: 200.0,
+                        ),
                       ),
                     )
                   ],
