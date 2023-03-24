@@ -1,4 +1,5 @@
 import 'package:appointment/screens/AdminScreens/schedulemanagment.dart';
+import 'package:appointment/screens/AdminScreens/labResults.dart';
 import 'package:appointment/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,8 +11,6 @@ import '../screens/authscreens/login.dart';
 import '../services/auth_services.dart';
 
 class NavDrawer extends StatefulWidget {
-  
-
   const NavDrawer({Key? key}) : super(key: key);
 
   @override
@@ -149,6 +148,26 @@ class _NavDrawerState extends State<NavDrawer> {
                   color: Colors.white),
             ),
             onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.add_chart_rounded,
+              color: Colors.white,
+              size: 30,
+            ),
+            title: Text(
+              'Lab Results',
+              style: GoogleFonts.urbanist(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: -0.1,
+                  color: Colors.white),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => LabResults()));
+            },
           ),
           ListTile(
             leading: const Icon(
