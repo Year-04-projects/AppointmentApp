@@ -6,12 +6,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../models/user_model.dart';
+import '../screens/AdminScreens/doctorsHome.dart';
 import '../provider/userdetailsprovider.dart';
 import '../screens/authscreens/login.dart';
 import '../services/auth_services.dart';
 
 class NavDrawer extends StatefulWidget {
-  const NavDrawer({Key? key}) : super(key: key);
+  const NavDrawer({Key? key, User? user}) : super(key: key);
 
   @override
   State<NavDrawer> createState() => _NavDrawerState();
@@ -131,6 +132,29 @@ class _NavDrawerState extends State<NavDrawer> {
               Navigator.pop(context);
               Navigator.pushReplacement(context,
                   MaterialPageRoute(builder: (context) => ScheduleManagment()));
+            },
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.vaccines,
+              color: Colors.white,
+              size: 30,
+            ),
+            title: Text(
+              'Doctors',
+              style: GoogleFonts.urbanist(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: -0.1,
+                  color: Colors.white),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const DoctorsHome()
+                ),
+              );
             },
           ),
           ListTile(
