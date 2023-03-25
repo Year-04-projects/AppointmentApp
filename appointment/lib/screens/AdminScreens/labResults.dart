@@ -30,6 +30,7 @@ class _LabResultsState extends State<LabResults> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(scaffoldBackgroundColor: Colors.white),
       home: Scaffold(
         appBar: AppBar(
             centerTitle: true,
@@ -42,11 +43,14 @@ class _LabResultsState extends State<LabResults> {
                 letterSpacing: -0.1,
               ),
             )),
+        drawer: NavDrawer(),
         body: Center(
           child: screens[_labWidgetIndex],
         ),
         bottomNavigationBar: BottomNavigationBar(
             currentIndex: _labWidgetIndex,
+            backgroundColor: Colors.white, // <-- This works for fixed
+            selectedItemColor: primaryColor,
             onTap: (int newIndex) {
               setState(() {
                 _labWidgetIndex = newIndex;
@@ -62,8 +66,8 @@ class _LabResultsState extends State<LabResults> {
                 icon: Icon(Icons.addchart),
               ),
               BottomNavigationBarItem(
-                label: 'Lab Tests',
-                icon: Icon(Icons.health_and_safety),
+                label: 'Help',
+                icon: Icon(Icons.help),
               ),
             ]),
       ),

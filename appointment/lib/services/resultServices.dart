@@ -9,6 +9,8 @@ class ResultService {
   static Future<LabResponse> addResult({
     required String name,
     required int age,
+    required String patientName,
+    required String dropdownValue,
   }) async {
     LabResponse res = LabResponse();
     DocumentReference docRef = _collection.doc();
@@ -16,6 +18,8 @@ class ResultService {
     Map<String, dynamic> data = <String, dynamic>{
       "Result name": name,
       "age": age,
+      "Patient name": patientName,
+      "Test type": dropdownValue,
     };
 
     var result = await docRef.set(data).whenComplete(() {
@@ -39,14 +43,21 @@ class ResultService {
 
   // view results
 
-  static Future<LabResponse> updateLabResult(
-      {required String name, required int age, required String id}) async {
+  static Future<LabResponse> updateLabResult({
+    required String name,
+    required int age,
+    required String id,
+    required String patientName,
+    required String dropdownValue,
+  }) async {
     LabResponse labRes = LabResponse();
     DocumentReference docRef = _collection.doc(id);
 
     Map<String, dynamic> data = <String, dynamic>{
       "Result name": name,
       "age": age,
+      "Patient name": patientName,
+      "Test type": dropdownValue,
     };
 
     await docRef.update(data).whenComplete(() {
