@@ -2,10 +2,13 @@
 
 import 'dart:math';
 
+import 'package:appointment/screens/AdminScreens/adminhome.dart';
+import 'package:appointment/screens/AdminScreens/schedulemanagment.dart';
 import 'package:appointment/services/schedule.service.dart';
 import 'package:appointment/widgets/common/Iconbtn.dart';
 import 'package:appointment/widgets/common/dateinputfield.dart';
 import 'package:appointment/widgets/common/dropdownfield.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -27,12 +30,30 @@ class _ScheduleManagmentModalState extends State<ScheduleManagmentModal> {
   final TextEditingController _arrivaltimecontroller = TextEditingController();
   final TextEditingController _leavingtimecontroller = TextEditingController();
 
-  List<String> items = ['None', 'ads', 'das'];
   List<String> days = ['Mon', 'Tue', 'Wens', 'Thur', 'Frid', 'Sat', 'Sun'];
   List<String> selectedDays = [];
 
   void addschedule() async {
+    final isFormValid = _formKey.currentState!.validate();
+    if (isFormValid == false && selectedDays.length == 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Empty Fields'),
+          backgroundColor: Colors.black,
+          duration: Duration(seconds: 3),
+        ),
+      );
+      return;
+    }
+    CollectionReference _collectionRef =
+        FirebaseFirestore.instance.collection('doctors');
+    QuerySnapshot querySnapshot =
+        await _collectionRef.where('name', isEqualTo: widget.doctor).get();
+    var _Data = querySnapshot.docs.map((doc) => doc.data()).toList();
+    var doctorid = (_Data?[0] as Map<String, dynamic>)?["uid"];
+    print('doctoreid ${(_Data?[0] as Map<String, dynamic>)?["uid"]}');
     final count = int.tryParse(_patientcountController.text);
+
     String res = await ScheduleService().addschedule(
         arivaltime: _arrivaltimecontroller.text,
         leavingtime: _leavingtimecontroller.text,
@@ -40,7 +61,7 @@ class _ScheduleManagmentModalState extends State<ScheduleManagmentModal> {
         venue: _venueController.text,
         daysavailable: selectedDays,
         comment: _commentcontroller.text,
-        docid: widget.doctor);
+        docid: doctorid);
     print('dfsfgdsgdf ${res}');
     if (res == 'Added Schedule') {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -51,6 +72,8 @@ class _ScheduleManagmentModalState extends State<ScheduleManagmentModal> {
         ),
       );
       Navigator.pop(context);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => ScheduleManagment()));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

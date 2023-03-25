@@ -161,8 +161,17 @@ class SscheduleManagmentState extends State<ScheduleManagment> {
         Expanded(
             flex: 9,
             child: _isLoading
-                ? Text('loading...')
-                : Padding(padding: EdgeInsets.all(10), child: tableWidget(records)))
+                ? Center(
+                    child: LinearProgressIndicator(),
+                  )
+                : Padding(
+                    padding: EdgeInsets.all(10),
+                    child: tableWidget(
+                      records,
+                      getData: (String) {
+                        getData();
+                      },
+                    )))
       ]),
     );
   }
