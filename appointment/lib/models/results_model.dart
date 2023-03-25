@@ -4,12 +4,15 @@ class Result {
   String? uid;
   final String name;
   final int age;
+  final String dropdownValue;
+  final String patientName;
 
-  Result({
-    this.uid,
-    required this.name,
-    required this.age,
-  });
+  Result(
+      {this.uid,
+      required this.name,
+      required this.dropdownValue,
+      required this.age,
+      required this.patientName});
 
 //   Map<String, dynamic> tojson() => {
 //         'name': name,
