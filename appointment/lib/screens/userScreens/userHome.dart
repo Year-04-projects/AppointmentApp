@@ -34,24 +34,41 @@ final List<Widget> _children = [
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: secondaryColor,
-          title: Row(
-            children: [
-              Image.asset(
-                'assets/logo.png',
-                width: 48,
-              ),
-              SizedBox(width: 10),
-              Text(
-                'Medicare',
-                style: GoogleFonts.urbanist(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: -0.1,
-                    color: primaryColor),
-              ),
-            ],
-          )),
+        backgroundColor: secondaryColor,
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/logo.png',
+              width: 48,
+            ),
+            SizedBox(width: 10),
+            Text(
+              'Medicare',
+              style: GoogleFonts.urbanist(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: -0.1,
+                  color: primaryColor),
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          PopupMenuButton<String>(
+            onSelected: (value) => {
+              // AuthServices().signOut(),
+              // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => login())),
+            },
+            itemBuilder: (BuildContext context) {
+              return {'Logout'}.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          ),
+        ],
+      ),
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
