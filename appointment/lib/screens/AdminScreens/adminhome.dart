@@ -46,7 +46,7 @@ class _adminHomeState extends State<adminHome> {
           ),
         ),
       ),
-      drawer: NavDrawer(user: _user),
+      drawer: NavDrawer(),
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 const primaryColor = Color.fromRGBO(104, 122, 225, 1);
 const secondaryColor = Color.fromRGBO(242, 223, 215, 1);
 const darkprimaryColor = Color(0xFF010230);
-const lightPrimaryColor = Color.fromRGBO(155, 106, 222, 0.3);
+const lightPrimaryColor = Color.fromARGB(83, 1, 2, 48);
 const unselectedIconColor = Color.fromRGBO(101, 96, 112, 1);
 const paginationColor = Color.fromRGBO(131, 145, 161, 1);
 const borderColor = Color.fromRGBO(131, 145, 161, 0.4);
