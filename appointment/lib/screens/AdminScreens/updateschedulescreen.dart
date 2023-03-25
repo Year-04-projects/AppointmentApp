@@ -68,6 +68,10 @@ class _UpdateScheduleScreenState extends State<UpdateScheduleScreen> {
   }
 
   void updateShedule() async {
+    final isFormValid = _formKey.currentState!.validate();
+    if (isFormValid == false) {
+      return;
+    }
     final count = int.tryParse(_patientcountController.text);
 
     print('outputss ${records['docid']}');
@@ -143,7 +147,9 @@ class _UpdateScheduleScreenState extends State<UpdateScheduleScreen> {
         ],
       ),
       body: _isLoading
-          ? Text("loading data...")
+          ? Center(
+              child: LinearProgressIndicator(),
+            )
           : SafeArea(
               child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 24),

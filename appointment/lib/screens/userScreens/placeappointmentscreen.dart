@@ -83,8 +83,9 @@ class _placeAppointmentState extends State<placeAppointment> {
                   SizedBox(
                     height: 10,
                   ),
+                  
                   Text(
-                    'Appointment Date:   ${widget.date}',
+                    'Appointment Date:   ${widget.date.toString().substring(0, 10)}',
                     style: GoogleFonts.urbanist(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -95,7 +96,7 @@ class _placeAppointmentState extends State<placeAppointment> {
                     height: 10,
                   ),
                   Text(
-                    'Doctor Specialization:   ${widget.doctordata['specialization']}',
+                    'Doctor Specialization:   ${widget.doctordata['speciality']}',
                     style: GoogleFonts.urbanist(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -151,7 +152,7 @@ class _placeAppointmentState extends State<placeAppointment> {
                       ),
                       onPressed: () async {
                         final res = await AppointmentService()
-                            .addappointment(date: widget.date.toString(), docid: widget.doctordata['docid']);
+                            .addappointment(date: widget.date.toString(), docid: widget.doctordata['uid']);
                         Map<String, dynamic> resMap =
                             res as Map<String, dynamic>;
                         print('outputsa ${resMap['msg']}');

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../utils/colors.dart';
@@ -22,7 +23,7 @@ class SearchableDropDownField extends StatefulWidget {
     required this.items,
     required this.onChanged,
     this.isPass = false,
-    this.textInputAction, 
+    this.textInputAction,
     required this.doctorController,
   }) : super(key: key);
 
@@ -99,25 +100,52 @@ class _SearchableDropDownFieldState extends State<SearchableDropDownField> {
           ),
           SizedBox(
             height: 100,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: widget.items.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  padding:  EdgeInsets.all(1),
-                  child: GestureDetector(
-                    child: ListTile(
-                      title: Text(widget.items[index]),
-                    ),
-                    onTap: () {
-                      setState(() {
-                        widget.doctorController.text = widget.items[index];
-                      });
+            child: StreamBuilder(
+              stream:
+                  FirebaseFirestore.instance.collection('doctors').snapshots(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: LinearProgressIndicator(),
+                  );
+                }
+                List doctors = snapshot.data!.docs;
+                if (widget.doctorController.text.isNotEmpty) {
+                  doctors = doctors
+                      .where((_element) => _element
+                          .data()['name']
+                          .toLowerCase()
+                          .contains(widget.doctorController.text.toLowerCase()))
+                      .toList();
+                  print('doctorssd=${doctors}');
+                }
+                return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: doctors.length,
+                    itemBuilder: (context, index) {
+                      final data = doctors[index].data();
+                      return Container(
+                        padding: EdgeInsets.all(1),
+                        child: GestureDetector(
+                          child: ListTile(
+                            title: Text(data["name"]),
+                          ),
+                          onTap: () {
+                            print("tapped ${data["name"]} ");
+                            onChanged:
+                            (value) {
+                              widget.onChanged(data["uid"]);
+                            };
+                            setState(() {
+                              widget.doctorController.text = data["name"];
+                            });
 
-                      // print('dasfasfsd ${widget.items[index]}');
-                    },
-                  ),
-                );
+                            // print('dasfasfsd ${widget.items[index]}');
+                          },
+                        ),
+                      );
+                    });
               },
             ),
           )
@@ -126,3 +154,30 @@ class _SearchableDropDownFieldState extends State<SearchableDropDownField> {
     );
   }
 }
+// doctorcard(
+//                         imageUrl: data["photoUrl"],
+//                         name: data["name"],
+//                         special: data['speciality'],
+//                         docid: data["uid"],
+//                       );
+// ListView.builder(
+//               shrinkWrap: true,
+//               itemCount: widget.items.length,
+//               itemBuilder: (BuildContext context, int index) {
+//                 return Container(
+//                   padding:  EdgeInsets.all(1),
+//                   child: GestureDetector(
+//                     child: ListTile(
+//                       title: Text(widget.items[index]),
+//                     ),
+//                     onTap: () {
+//                       setState(() {
+//                         widget.doctorController.text = widget.items[index];
+//                       });
+
+//                       // print('dasfasfsd ${widget.items[index]}');
+//                     },
+//                   ),
+//                 );
+//               },
+//             ),

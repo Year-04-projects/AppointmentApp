@@ -18,6 +18,7 @@ class appointmenttime extends StatefulWidget {
 
 class _appointmenttimeState extends State<appointmenttime> {
   bool _isLoading = false;
+  bool _noSchedule = false;
   var _Data;
   var _SchduleData;
   var _fullybookeddates;
@@ -38,7 +39,9 @@ class _appointmenttimeState extends State<appointmenttime> {
     CollectionReference _collectionRef =
         FirebaseFirestore.instance.collection('doctors');
     QuerySnapshot querySnapshot =
-        await _collectionRef.where('docid', isEqualTo: widget.docid).get();
+        await _collectionRef.where('uid', isEqualTo: widget.docid).get();
+    _Data = querySnapshot.docs.map((doc) => doc.data()).toList();
+    print('fsdfsd$_Data');
 
     CollectionReference _schedulecollectionRef =
         FirebaseFirestore.instance.collection('schedule');
@@ -46,8 +49,18 @@ class _appointmenttimeState extends State<appointmenttime> {
         .where('docid', isEqualTo: widget.docid)
         .get();
     _SchduleData = schedulequerySnapshot.docs.map((doc) => doc.data()).toList();
-    _Data = querySnapshot.docs.map((doc) => doc.data()).toList();
-
+    print('fsdfsd _SchduleData  ${_SchduleData.length}');
+    if (_SchduleData.length == 0) {
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Sorry Schedule Not Added Yet'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+        ),
+      );
+      
+    }
     // print('countofdocs snapshot${querySnapshot}');
     int count = querySnapshot.size;
 
@@ -79,7 +92,9 @@ class _appointmenttimeState extends State<appointmenttime> {
           ),
         ),
         body: _isLoading
-            ? Text('loading')
+            ? Center(
+                child: LinearProgressIndicator(),
+              )
             : SingleChildScrollView(
                 child: Expanded(
                 child: Column(
