@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:appointment/screens/userScreens/userHome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,6 +9,7 @@ import '../../models/user_model.dart';
 import '../../services/auth_services.dart';
 import '../../utils/colors.dart';
 import '../../widgets/common/tex_field_field.dart';
+import '../../widgets/toastMessage.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({Key? key}) : super(key: key);
@@ -27,17 +29,25 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   User? _user;
   late File image;
   bool isPicked = false;
-
-  String name="";
-  int age=0;
+  late String prof_url;
+  late String email;
+  late String role;
+  late bool _isLoading;
+  late String docid;
+  late String name;
+  late int age;
 
   void userdetails() async {
     User user = await AuthServices().getUserDetails();
     print('name');
     setState(() {
       _user = user;
+      docid=_user?.uid as String;
       name=_user?.name as String;
       age=_user?.age as int;
+      prof_url=_user?.photoUrl as String;
+      email=_user?.email as String;
+      role=_user?.role as String;
     });
   }
 
@@ -91,9 +101,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         child: ClipRRect(
                           borderRadius:BorderRadius.circular(200),
                           child: isPicked ?
-                          Image.file(
-                            image,
-                          )    :
+                          Image.file(image)
+                              :
+                          prof_url.isNotEmpty ?
+                          Image(image:NetworkImage(prof_url))
+                               :
                           const Image(
                             image: NetworkImage("https://firebasestorage.googleapis.com/v0/b/ctsea1.appspot.com/o/doctors%2Favatar.jpg?alt=media&token=7880ba93-e7ad-45cb-bb80-6d22fd65ac30"),
                           ),
@@ -152,13 +164,37 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                 SizedBox(
                   width: 200,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       // final isFormValid = _formKey.currentState!.validate();
                       // if (isFormValid == false) {
                       //   return;
                       // }
-                      Navigator.push(
-                          context, MaterialPageRoute(builder: (context) => UpdateProfileScreen()));
+
+                      _isLoading = true;
+                      if(isPicked == true) {
+                        if(prof_url.isNotEmpty) {
+                          await AuthServices().deleteImage(prof_url);
+                        }
+                        prof_url = await AuthServices().uploadImage(image);
+                        setState(() {});
+                      }
+
+                      String res = await AuthServices().updateUser(
+                        docid: docid,
+                        name: _nameController.text,
+                        age: int.parse(_ageController.text),
+                        email: email,
+                        role: role,
+                        photoUrl: prof_url,
+                      );
+                      if (res == 'success') {
+                        toastMessage(context,"User Updated");
+                        _isLoading  = false;
+                        Navigator.push(
+                            context, MaterialPageRoute(builder: (context) => userHome()));
+
+                      }
+                      _isLoading  = false;
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: primaryColor, shape: StadiumBorder()

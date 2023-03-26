@@ -1,11 +1,15 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:uuid/uuid.dart';
 import '../models/user_model.dart' as model;
 import 'package:flutter/foundation.dart';
 
 class AuthServices {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final storage = FirebaseStorage.instance;
 
   //! Get logged user Details
   Future<model.User> getUserDetails() async {
@@ -60,7 +64,8 @@ class AuthServices {
             name: name,
             email: email,
             role: role,
-            photoUrl: 'https://www.gravatar.com/avatar/?d=mp');
+            photoUrl: '',
+        );
         await _firestore
             .collection('users')
             .doc(cred.user!.uid)
@@ -112,4 +117,62 @@ class AuthServices {
 
     return res;
   }
+
+  Future<String> updateUser({
+    required String name,
+    required int age,
+    required String photoUrl,
+    required String role,
+    required String email,
+    required String docid,
+  }) async {
+
+    print(name);
+    print(docid);
+    print(photoUrl);
+
+    try {
+
+      model.User user = model.User(
+        uid: docid,
+        name: name,
+        age: age,
+        role: role,
+        email: email,
+        photoUrl: photoUrl,
+      );
+
+      await _firestore.collection('users').doc(docid).update(user.tojson());
+      return 'success';
+    } catch (e) {
+      print('error doctor ${e}');
+      return e.toString();
+    }
+  }
+
+  Future<void>deleteAccount(String docid) async {
+    await _firestore.collection('users').doc(docid).delete();
+    _auth.currentUser?.delete();
+    _auth.signOut();
+
+
+  }
+
+  Future<String> uploadImage(File pickedFile) async {
+    const uid =  Uuid();
+    final fileName = uid.v4();
+
+    final reference = storage.ref().child('users/$fileName');
+    print(reference);
+    final uploadTask = reference.putFile(File(pickedFile.path));
+    await uploadTask.whenComplete(() => print('Image uploaded'));
+    final imageUrl = await reference.getDownloadURL();
+    print('Download URL: $imageUrl');
+    return imageUrl;
+  }
+
+  Future<void> deleteImage(String url) async {
+    await storage.refFromURL(url).delete();
+  }
+
 }
