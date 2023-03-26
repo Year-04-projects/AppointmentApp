@@ -11,6 +11,7 @@ class TextFieldInput extends StatelessWidget {
   final String hintText;
   final TextInputType textInputType;
   final bool isEmail;
+  // final bool isAge;
   final String isConfirmPass;
   final TextInputAction? textInputAction;
 
@@ -22,6 +23,7 @@ class TextFieldInput extends StatelessWidget {
     required this.textInputType,
     required this.label,
     this.isEmail = false,
+    // this.isAge = false,
     this.isConfirmPass = '',
     this.textInputAction,
   }) : super(key: key);
@@ -83,7 +85,14 @@ class TextFieldInput extends StatelessWidget {
             if (isConfirmPass.isNotEmpty) {
               return isConfirmPass == value ? null : 'Password not match';
             }
-
+            // if (isAge) {
+            //   int? age = int.tryParse(value);
+            //   if (age == null) {
+            //     return 'Please enter a valid age';
+            //   } else if (age <= 0) {
+            //     return 'Age cannot be zero or negative';
+            //   }
+            // }
             return null;
           },
         ),
