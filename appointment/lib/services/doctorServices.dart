@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import '../models/doctor_model.dart' as model;
-import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:io';
 
@@ -22,6 +19,11 @@ class DoctorService {
     final imageUrl = await reference.getDownloadURL();
     print('Download URL: $imageUrl');
     return imageUrl;
+  }
+
+  Future<void> deleteImage(String url) async {
+    await storage.refFromURL(url).delete();
+
   }
 
   Future<String> addDoctor({
@@ -59,4 +61,64 @@ class DoctorService {
       return e.toString();
     }
   }
+
+  Future<model.Doctor> getDoctorDetails(String id) async {
+    try {
+        DocumentSnapshot snap =
+        await _firestore.collection('doctors').doc(id).get();
+
+        return model.Doctor.fromSnap(snap);
+
+    } catch (e) {
+      print('${e}');
+      throw Exception(e);
+    }
+  }
+
+  Future<String> updateDoctor({
+    required String name,
+    required String speciality,
+    required String email,
+    required String phone,
+    required String photoUrl,
+    required String docid,
+  }) async {
+    print(name);
+    print(speciality);
+    print(docid);
+    print(photoUrl);
+
+    try {
+      model.Doctor schedule = model.Doctor(
+        uid: docid,
+        name: name,
+        speciality: speciality,
+        email: email,
+        phone: phone,
+        photoUrl: photoUrl,
+      );
+
+      await _firestore.collection('doctors').doc(docid).update(schedule.tojson());
+      return 'success';
+    } catch (e) {
+      print('error doctor ${e}');
+      return e.toString();
+    }
+  }
+
+  Future<String> deleteDoctor({
+    required String docid,
+  }) async {
+    print(docid);
+
+    try {
+
+      await _firestore.collection('doctors').doc(docid).delete();
+      return 'success';
+    } catch (e) {
+      print('error doctor ${e}');
+      return e.toString();
+    }
+  }
+
 }
