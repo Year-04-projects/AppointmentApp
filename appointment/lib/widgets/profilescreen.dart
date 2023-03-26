@@ -19,13 +19,18 @@ class _profilescreenState extends State<profilescreen> {
 
   User? _user;
   String name="",email="";
+  late String photoUrl,uid;
+  late int age;
   void userdetails() async {
     User user = await AuthServices().getUserDetails();
     print('name');
     setState(() {
       _user = user;
+      uid=_user?.uid as String;
       name=_user?.name as String;
       email=_user?.email as String;
+      age=_user?.age as int;
+      photoUrl=_user?.photoUrl as String;
     });
   }
 
@@ -52,7 +57,9 @@ class _profilescreenState extends State<profilescreen> {
                 height: 120,
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(220),
-                    child: Image.network(uProfileImage,fit: BoxFit.cover,),
+                  child: Image.network(
+                    photoUrl.isNotEmpty ? photoUrl : uProfileImage,
+                    fit: BoxFit.cover,),
                 ),
               ),
               const SizedBox(height: 10),
@@ -98,14 +105,16 @@ class _profilescreenState extends State<profilescreen> {
                     color: Colors.red,
                   ),
                 ),
-                onTap: (){
+                  onTap: () async {
+                  if (photoUrl.isNotEmpty) {
+                    await AuthServices().deleteImage(photoUrl);
+                  }
+                  await AuthServices().deleteAccount(uid);
 
-
-                 //  Navigator.pushReplacement(
-                 //      context, MaterialPageRoute(builder: (context) => login()));
-                },
-              ),
-              //menu
+                  Navigator.pushReplacement(
+                      context, MaterialPageRoute(builder: (context) => login()));
+                }),
+            //menu
               ListTile(
                 leading: Container(
                   width: 30,
