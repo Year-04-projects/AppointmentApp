@@ -5,7 +5,6 @@ import '../../models/user_model.dart';
 import '../../services/auth_services.dart';
 import '../../utils/colors.dart';
 import '../../widgets/doctorTile.dart';
-import '../../widgets/doctorcard.dart';
 import '../../widgets/nav_drawer.dart';
 import 'addDoctor.dart';
 
@@ -86,11 +85,13 @@ class _DoctorsHomeState extends State<DoctorsHome> {
                       itemCount: doctors.length,
                       itemBuilder: (context, index) {
                         final data = doctors[index].data();
-                        return doctorTile(
+                        return DoctorTile(
                           imageUrl: data["photoUrl"],
                           name: data["name"],
                           special: data['speciality'],
                           docid: data["uid"],
+                          email: data["email"],
+                          phone: data["phone"],
                         );
                       });
                 },

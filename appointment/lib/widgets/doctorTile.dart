@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../screens/userScreens/appointmentselecttimescreen.dart';
+import '../screens/AdminScreens/doctorUpdate.dart';
+import '../utils/colors.dart';
 
-class doctorTile extends StatelessWidget {
+class DoctorTile extends StatefulWidget {
   final String imageUrl;
   final String name;
   final String special;
+  final String phone;
+  final String email;
   final String docid;
 
-  const doctorTile({
+  const DoctorTile({
     super.key,
     required this.imageUrl,
     required this.name,
     required this.special,
+    required this.phone,
+    required this.email,
     required this.docid,
   });
 
-  get primaryColor => null;
+  @override
+  State<DoctorTile> createState() => _DoctorTileState();
+}
 
+class _DoctorTileState extends State<DoctorTile> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -28,7 +36,7 @@ class doctorTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-                child: Image.network(imageUrl, height: 150, width: 150,)),
+                child: Image.network(widget.imageUrl, height: 150, width: 150,)),
             Expanded(
                 flex: 3,
                 child: Padding(
@@ -37,7 +45,7 @@ class doctorTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        name,
+                        widget.name,
                         style: GoogleFonts.urbanist(
                           fontSize: 15,
                           color: const Color.fromRGBO(30, 35, 44, 1),
@@ -48,7 +56,7 @@ class doctorTile extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        special,
+                        widget.special,
                         style: GoogleFonts.urbanist(
                           fontSize: 15,
                           color: const Color.fromRGBO(30, 35, 44, 1),
@@ -58,33 +66,44 @@ class doctorTile extends StatelessWidget {
                       Container(
                         width: MediaQuery.of(context).size.width * 1,
                         child: Container(
-                            width: 200,
+                            width: 100,
                             height: 50,
                             alignment: Alignment.bottomRight,
-                            child: Row(
-                              children: [
-                                SizedBox(
-                                  height: 50,
-                                  width: 50,
-                                  child: CircleAvatar(
-                                    radius: 50,
-                                    backgroundColor: primaryColor,
-                                    child: IconButton(
-                                      iconSize: 50,
-                                      style: ButtonStyle(
-                                        // borderRadius: BorderRadius.circular(100),
-                                        foregroundColor: MaterialStateProperty.all(primaryColor),
-                                      ),
-                                      onPressed: () { },
-                                      icon: const Icon(
-                                        Icons.edit,
-                                        color: Colors.white,
-                                        size: 30,
-                                      ),
-                                    ),
+                            child: SizedBox(
+                              height: 50,
+                              width: 100,
+                              child: CircleAvatar(
+                                radius: 50,
+                                backgroundColor: primaryColor,
+                                child: IconButton(
+                                  iconSize: 50,
+                                  style: ButtonStyle(
+                                    // borderRadius: BorderRadius.circular(100),
+                                    foregroundColor: MaterialStateProperty.all(primaryColor),
+                                  ),
+                                  onPressed: () {
+                                    print(widget.docid);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DoctorUpdate(
+                                                id: widget.docid,
+                                                name: widget.name,
+                                                special: widget.special,
+                                                imageUrl: widget.imageUrl,
+                                            email: widget.email,
+                                            phone: widget.phone,
+                                              ),
+                                        ),
+                                    );
+                                  },
+                                  icon: const Icon(
+                                    Icons.edit,
+                                    color: Colors.white,
+                                    size: 30,
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
                         ),
                       ),

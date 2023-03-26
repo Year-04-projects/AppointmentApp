@@ -5,6 +5,7 @@ class User {
   final String name;
   final String email;
   final String role;
+  final int age;
   final String photoUrl;
 
   const User({
@@ -12,6 +13,7 @@ class User {
     required this.name,
     required this.email,
     required this.role,
+    this.age = 1,
     required this.photoUrl,
   });
 
@@ -20,6 +22,7 @@ class User {
         'name': name,
         'email': email,
         'role': role,
+        'age': age,
         'photoUrl': photoUrl,
       };
 
@@ -29,6 +32,7 @@ class User {
       name: user.name,
       email: user.email,
       role: user.role,
+      age: user.age,
       photoUrl: user.photoUrl,
     );
   }
@@ -41,6 +45,7 @@ class User {
       name: snapshot['name'],
       email: snapshot['email'],
       role: snapshot['role'],
+      age: snapshot['age'],
       photoUrl: snapshot['photoUrl'],
     );
   }
